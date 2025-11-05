@@ -2,7 +2,10 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import Navbar from '../components/Navbar'
+import { useNavigate } from 'react-router';
 import axios from 'axios';
+import { useDispatch } from 'react-redux';
+import { setAdmin } from '../Store/AdminSlice';
 //const API_BASE = 'http://localhost:8081';
 const API_BASE = import.meta.env.VITE_API_BASE_URL;
 
@@ -13,6 +16,10 @@ const signupSchema = z.object({
 });
 
 export default function Login() {
+
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const {
     register,
     handleSubmit,
@@ -29,11 +36,13 @@ export default function Login() {
       });
       if (!res.ok) {
         const msg = await res.text();
+        console.log(msg);
         throw new Error(msg || 'Login failed');
       }
       else {
-        const text = await res.text();
-        console.log('response status', res.status, 'body', text);
+        let data = await res.json();
+        dispatch(setAdmin(data));
+        navigate('/admin/dashboard');
       }
     }
     catch(error) {

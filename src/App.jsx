@@ -7,12 +7,15 @@ import HomePage from './pages/HomePage'
 import About from './pages/About'
 import Guidelines from './pages/Guidelines';
 import Contact from './pages/Contactus'
+import AdminDashboard from './pages/Dashboard'
+import { Provider } from 'react-redux'
+import { store } from './Store/Store'
 
 function App() {
   const [count, setCount] = useState(0)
 
   return (
-    <div> 
+    <Provider store={store}> 
       <Routes>
         <Route path="/" element={<HomePage></HomePage>}></Route>
         <Route path="/login" element={<Login></Login>}></Route>
@@ -20,9 +23,10 @@ function App() {
         <Route path="/about" element={<About></About>}></Route>
         <Route path="/guidelines" element={<Guidelines></Guidelines>}></Route>
         <Route path="/contactus" element={<Contact></Contact>}></Route>
+        <Route path="/admin/dashboard" element={<AdminDashboard></AdminDashboard>}></Route>
       </Routes>
-    </div>
+    </Provider>
   )
 }
 
-export default App
+export default App;
