@@ -41,7 +41,7 @@ export default function Login() {
       }
       else {
         let data = await res.json();
-        dispatch(setAdmin(data));
+        dispatch(setAdmin(data))
         navigate('/admin/dashboard');
       }
     }

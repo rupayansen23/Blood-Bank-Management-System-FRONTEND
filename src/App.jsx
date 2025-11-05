@@ -24,6 +24,7 @@ function App() {
         <Route path="/guidelines" element={<Guidelines></Guidelines>}></Route>
         <Route path="/contactus" element={<Contact></Contact>}></Route>
         <Route path="/admin/dashboard" element={<AdminDashboard></AdminDashboard>}></Route>
+        <Route path=""></Route>
       </Routes>
     </Provider>
   )
