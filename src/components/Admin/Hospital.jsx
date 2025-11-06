@@ -1,12 +1,12 @@
 export default function Hospital() {
-    return(
+    return (
         <div className="w-[80%] h-screen ">
-            <div className="w-full h-[12%]">
+            <div className="w-full bg-green-100 h-[12%]">
                 <div className="p-5">
-                    <p className="ml-2 text-2xl font-bold text-black">Hospitals</p>
+                    <p className="ml-2 text-2xl font-bold">Hospital</p>
                 </div>
             </div>
-            <div>
+            <div className="flex w-full h-full bg-amber-200">
 
             </div>
         </div>

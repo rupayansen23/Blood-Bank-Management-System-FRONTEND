@@ -24,7 +24,7 @@ export default function Sidebar() {
                                 <Users className="w-5 h-5 text-gray-700" /> <span>Users</span>
                             </li>
                         </Link>
-                        <Link to="/">
+                        <Link to="home">
                         <li className="flex items-center justify-center gap-3 cursor-pointer bg-pink-200 hover:bg-pink-300 px-4 py-2 rounded-lg shadow-md hover:shadow-lg transition text-center">
                             <Home className="w-5 h-5 text-gray-700" /> <span>Home</span>
                         </li>

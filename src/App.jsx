@@ -28,10 +28,11 @@ function App() {
         <Route path="/guidelines" element={<Guidelines></Guidelines>}></Route>
         <Route path="/contactus" element={<Contact></Contact>}></Route>
         <Route path="/admin/dashboard" element={<AdminDashboard></AdminDashboard>}>
-          <Route index element={<AdminHome />} />
+          {/* <Route index element={<AdminHome />} /> */}
           <Route path="hospitals" element={<Hospitals></Hospitals>}></Route>
           <Route path="bloodBank" element={<BloodBank></BloodBank>}></Route>
           <Route path="users" element={<Users></Users>}></Route>
+          <Route path="home" element={<AdminHome></AdminHome>}></Route>
 
         </Route>
         <Route path=""></Route>
