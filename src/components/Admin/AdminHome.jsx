@@ -1,4 +1,4 @@
-export default function MainContent() {
+export default function AdminHome() {
     return (
         <div className="w-[80%] h-screen ">
             <div className="w-full bg-green-100 h-[12%]">

@@ -1,5 +1,5 @@
 import { useEffect } from "react"
-import { getAdmin } from "../Store/AdminSlice";
+import { getAdmin } from "../../Store/AdminSlice";
 import { useSelector } from "react-redux";
 
 export default function AdminNavbar() {
@@ -10,14 +10,16 @@ export default function AdminNavbar() {
     // useEffect(()=>{
     //     async function fetchData(params) {
             
-    //         const response = await fetch("http://localhost:5173/getAdminInfo/{userName}");
+    //         const response = await fetch(`http://localhost:8081/getAdminInfo/${adminData.userName}`);
+    //         const data = await response.json();
+    //         console.log(data);
 
     //     }
     //     fetchData();
-    // })
+    // }, [])
 
     return (
-        <div className="flex justify-between bg-gradient-to-r from-red-900 via-red-700 to-red-500 shadow-md text-white">
+        <div className="flex justify-between bg-gradient-to-r from-red-900 via-red-700 to-red-500 shadow-md text-white top-">
             <div className="ml-5 p-5"><h1 className="font-bold text-2xl text-white">Admin Panel</h1></div>
             <div>
                 <h2 className="mr-4 p-5">Hii {adminData?.firstName}</h2>
