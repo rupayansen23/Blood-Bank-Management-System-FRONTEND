@@ -1,6 +1,6 @@
 import AdminNavbar from "../../components/Admin/AdminNavbar";
 import Sidebar from "../../components/Admin/Sidebar";
-import AdminHome from "../../components/Admin/AdminHome";
+import { Outlet } from "react-router-dom";
 
 
 export default function AdminDasbordHome() {
@@ -10,7 +10,7 @@ export default function AdminDasbordHome() {
         <div><AdminNavbar></AdminNavbar></div>
         <div className="flex">
           <Sidebar></Sidebar>
-          <AdminHome></AdminHome>
+          <Outlet />
         </div>
       </div>
     )

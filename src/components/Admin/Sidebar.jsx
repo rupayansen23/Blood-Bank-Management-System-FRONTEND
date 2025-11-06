@@ -1,8 +1,5 @@
 import { Building2, Droplet, Users, Home } from "lucide-react";
 import { Link } from "react-router-dom";
-
-
-import AdminHome from "./AdminHome";
 export default function Sidebar() {
     return(
         <div className="w-[20%] h-screen bg-pink-100">
@@ -27,9 +24,11 @@ export default function Sidebar() {
                                 <Users className="w-5 h-5 text-gray-700" /> <span>Users</span>
                             </li>
                         </Link>
+                        <Link to="/">
                         <li className="flex items-center justify-center gap-3 cursor-pointer bg-pink-200 hover:bg-pink-300 px-4 py-2 rounded-lg shadow-md hover:shadow-lg transition text-center">
                             <Home className="w-5 h-5 text-gray-700" /> <span>Home</span>
                         </li>
+                        </Link>
                     </ul>
                 </div>
             </div>

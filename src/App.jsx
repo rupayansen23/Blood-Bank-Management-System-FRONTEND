@@ -13,6 +13,7 @@ import { store } from './Store/Store'
 import Hospitals from './pages/Admin/Hospitals'
 import BloodBank from './pages/Admin/BloodBank'
 import Users from './pages/Admin/Users'
+import AdminHome from './components/Admin/AdminHome'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -27,7 +28,7 @@ function App() {
         <Route path="/guidelines" element={<Guidelines></Guidelines>}></Route>
         <Route path="/contactus" element={<Contact></Contact>}></Route>
         <Route path="/admin/dashboard" element={<AdminDashboard></AdminDashboard>}>
-
+          <Route index element={<AdminHome />} />
           <Route path="hospitals" element={<Hospitals></Hospitals>}></Route>
           <Route path="bloodBank" element={<BloodBank></BloodBank>}></Route>
           <Route path="users" element={<Users></Users>}></Route>
