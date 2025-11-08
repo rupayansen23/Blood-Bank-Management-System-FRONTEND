@@ -1,11 +1,12 @@
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { getAdmin } from "../../Store/AdminSlice";
 import { useSelector } from "react-redux";
 
 export default function AdminNavbar() {
 
+     
     const adminData = useSelector(getAdmin);
-    console.log(adminData);
+    // const [adminInfo, setAdminInfo] = useState(null);
 
     // useEffect(()=>{
     //     async function fetchData(params) {
@@ -13,10 +14,11 @@ export default function AdminNavbar() {
     //         const response = await fetch(`http://localhost:8081/getAdminInfo/${adminData.userName}`);
     //         const data = await response.json();
     //         console.log(data);
+    //         setAdminInfo(data);
 
     //     }
     //     fetchData();
-    // }, [])
+    // }, [adminInfo])
 
     return (
         <div className="flex justify-between bg-gradient-to-r from-red-900 via-red-700 to-red-500 shadow-md text-white top-">

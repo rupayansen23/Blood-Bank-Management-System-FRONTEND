@@ -7,7 +7,7 @@ export default function Hospital() {
                 </div>
             </div>
             <div className="flex w-full h-full bg-amber-200">
-
+                    
             </div>
         </div>
     )
