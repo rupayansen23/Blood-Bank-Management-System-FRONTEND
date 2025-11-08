@@ -10,7 +10,9 @@ export default function AdminDasbordHome() {
         <div><AdminNavbar></AdminNavbar></div>
         <div className="flex">
           <Sidebar></Sidebar>
-          <Outlet />
+          <div className="flex-1 w-full">
+            <Outlet />
+          </div>
         </div>
       </div>
     )
