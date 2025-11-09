@@ -1,10 +1,13 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
+const API_BASE = import.meta.env.VITE_API_BASE_URL;
 
 const signupSchema = z.object({
-  firstName: z.string().min(3, "Minimum character should be 3"),
-  emailId: z.string().email("Invalid Email"),
+  donorName: z.string().min(3, "Minimum character should be 3"),
+  donorEmailId: z.string().email("Invalid Email"),
+  donorContactNumber: z.coerce.number()
+  .refine((num) => num.toString().length === 10, "Phone number must be 10 digits"),
   password: z.string().min(8, "Password is to weak")
 });
 
@@ -15,10 +18,27 @@ function Signup() {
     formState: { errors },
   } = useForm({ resolver: zodResolver(signupSchema) });
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     console.log(data);
-
-    // Backend data ko send kar dena chaiye?
+    try {
+      const resp = await fetch(`${API_BASE}/signup`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data), 
+      });
+      if (!resp.ok) {
+        const msg = await resp.text();
+        console.log(msg);
+        throw new Error(msg || 'Login failed');
+      } 
+      else {
+        let respData = await resp.json();
+        console.log(respData);
+      }
+    }
+    catch(error) {
+      console.log(error, error.message);
+    }
   };
 
   return (
@@ -30,16 +50,16 @@ function Signup() {
             {/* Existing form fields */}
             <div className="form-control">
               <label className="label mb-1">
-                <span className="label-text">First Name</span>
+                <span className="label-text">Donor Name</span>
               </label>
               <input
                 type="text"
                 placeholder="John"
-                className={`input input-bordered ${errors.firstName && 'input-error'}`}
-                {...register('firstName')}
+                className={`input input-bordered ${errors.donorName && 'input-error'}`}
+                {...register('donorName')}
               />
-              {errors.firstName && (
-                <span className="text-error">{errors.firstName.message}</span>
+              {errors.donorName && (
+                <span className="text-error">{errors.donorName.message}</span>
               )}
             </div>
 
@@ -50,11 +70,26 @@ function Signup() {
               <input
                 type="email"
                 placeholder="john@example.com"
-                className={`input input-bordered ${errors.emailId && 'input-error'}`}
-                {...register('emailId')}
+                className={`input input-bordered ${errors.donorEmailId && 'input-error'}`}
+                {...register('donorEmailId')}
               />
-              {errors.emailId && (
-                <span className="text-error">{errors.emailId.message}</span>
+              {errors.donorEmailId && (
+                <span className="text-error">{errors.donorEmailId.message}</span>
+              )}
+            </div>
+
+            <div className="form-control">
+              <label className="label mb-1 mt-4">
+                <span className="label-text">Phone Number</span>
+              </label>
+              <input
+                type="number"
+                placeholder="912345678"
+                className={`input input-bordered ${errors.donorContactNumber && 'input-error'}`}
+                {...register('donorContactNumber')}
+              />
+              {errors.donorContactNumber && (
+                <span className="text-error">{errors.donorContactNumber.message}</span>
               )}
             </div>
 
