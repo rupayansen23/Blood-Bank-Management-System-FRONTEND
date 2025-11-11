@@ -24,11 +24,23 @@ export default function Navbar() {
             </div>
             <div className="flex items-center">
                 <ul className="flex">
-                    <li className="mr-5 text-red-400 hover:text-white cursor-pointer">Check Blood</li>
-                    <li className="mr-5 text-red-400 hover:text-white cursor-pointer">Doner Form</li>
-                    <li className="mr-5 text-red-400 hover:text-white cursor-pointer">Doner Details</li>
-                    <li className="mr-5 text-red-400 hover:text-white cursor-pointer">
-                        <Link to="/login">Admin Login</Link>
+
+                     <li className='mr-5'>
+                        <Link to="/login" className="inline-block px-4 py-2 bg-red-800 hover:bg-red-900 text-white font-semibold rounded-md shadow-sm transition">
+                            Login
+                        </Link>
+                    </li>
+                    
+                    {/* Sign Up button-like link */}
+                    <li className='mr-5'>
+                        <Link to="/signup"className="inline-block px-4 py-2 bg-red-800 hover:bg-red-900 text-white font-semibold rounded-md shadow-sm transition">
+                            Sign Up
+                        </Link>
+                    </li>
+                    <li className='mr-5'>
+                        <Link to="/adminlogin"className="inline-block px-4 py-2 bg-red-800 hover:bg-red-900 text-white font-semibold rounded-md shadow-sm transition">
+                            Admin Login
+                        </Link>
                     </li>
                 </ul>
             </div>

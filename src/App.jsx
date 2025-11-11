@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router'
 import './App.css'
-import Login from './pages/Login'
+import Login from './pages/Admin/Login'
 import Signup from './pages/SIgnup'
 import HomePage from './pages/HomePage'
 import About from './pages/About'
@@ -14,6 +14,9 @@ import Hospitals from './pages/Admin/Hospitals'
 import BloodBank from './pages/Admin/BloodBank'
 import Users from './pages/Admin/Users'
 import AdminHome from './components/Admin/AdminHome'
+import UserDashboard from './pages/User/UserDashboard'
+import UserInfo from './pages/User/UserInfo'
+import UserLogin from './pages/User/UserLogin'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -22,7 +25,8 @@ function App() {
     <Provider store={store}> 
       <Routes>
         <Route path="/" element={<HomePage></HomePage>}></Route>
-        <Route path="/login" element={<Login></Login>}></Route>
+        <Route path="/adminlogin" element={<Login></Login>}></Route>
+        <Route path='/login' element={<UserLogin></UserLogin>}></Route>
         <Route path="/signup" element={<Signup></Signup>}></Route>
         <Route path="/about" element={<About></About>}></Route>
         <Route path="/guidelines" element={<Guidelines></Guidelines>}></Route>
@@ -33,9 +37,10 @@ function App() {
           <Route path="bloodBank" element={<BloodBank></BloodBank>}></Route>
           <Route path="users" element={<Users></Users>}></Route>
           <Route path="home" element={<AdminHome></AdminHome>}></Route>
-
         </Route>
-        <Route path=""></Route>
+        <Route path="/user/dashboard" element={<UserDashboard></UserDashboard>}>
+          <Route path="userInfo" element={<UserInfo></UserInfo>}></Route>
+        </Route>
       </Routes>
     </Provider>
   )
