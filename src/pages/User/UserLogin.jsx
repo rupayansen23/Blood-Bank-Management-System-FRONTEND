@@ -1,7 +1,7 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
+import { negative, z } from 'zod';
 import Navbar from '../../components/Navbar';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
@@ -27,7 +27,7 @@ export default function UserLogin() {
   } = useForm({ resolver: zodResolver(signupSchema) });
 
   const onSubmit = async (data) => {
-    console.log(data);
+    //console.log(data);
     try {
       if (data.role === 'user') {
         delete data.role;
@@ -42,8 +42,11 @@ export default function UserLogin() {
           console.log(msg);
           throw new Error(msg || 'Login failed');
         } else {
-          const responseText = await res.text();
-          console.log(responseText);
+          const responseData = await res.json();
+          delete responseData.password;
+          //console.log(responseData);
+          sessionStorage.setItem("user", responseData.donorEmailId);
+          navigate('/user/dashboard');
         }
       } else if (data.role === 'hospital') {
         delete data.role;
@@ -58,8 +61,10 @@ export default function UserLogin() {
           console.log(msg);
           throw new Error(msg || 'Login failed');
         } else {
-          const responseText = await res.text();
-          console.log(responseText);
+          const responseData = await res.json();
+          
+          console.log(responseData);
+          
         }
       } else {
         // bloodBank
