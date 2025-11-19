@@ -16,7 +16,10 @@ import Users from './pages/Admin/Users'
 import AdminHome from './components/Admin/AdminHome'
 import UserDashboard from './pages/User/UserDashboard'
 import UserInfo from './pages/User/UserInfo'
-import UserLogin from './pages/User/UserLogin'
+import UserLogin from './pages/UserLogin'
+import HospitalDashboard from './pages/Hospital/HospitalDashboard'
+import BloodBankDashbord from './pages/BloodBank/BloodBankDashbord'
+import BloodBankInfo from './pages/BloodBank/BloodBankInfo'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -40,6 +43,10 @@ function App() {
         </Route>
         <Route path="/user/dashboard" element={<UserDashboard></UserDashboard>}>
           <Route path="userInfo" element={<UserInfo></UserInfo>}></Route>
+        </Route>
+        <Route path="/hospital/dashbord" element={<HospitalDashboard></HospitalDashboard>}></Route>
+        <Route path="/bloodbank/dashbord" element={<BloodBankDashbord></BloodBankDashbord>}>
+          <Route path="bloodbankinfo" element={<BloodBankInfo></BloodBankInfo>}></Route>
         </Route>
       </Routes>
     </Provider>

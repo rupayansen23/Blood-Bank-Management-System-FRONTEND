@@ -2,7 +2,7 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { negative, z } from 'zod';
-import Navbar from '../../components/Navbar';
+import Navbar from '../components/Navbar';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 
@@ -27,7 +27,6 @@ export default function UserLogin() {
   } = useForm({ resolver: zodResolver(signupSchema) });
 
   const onSubmit = async (data) => {
-    //console.log(data);
     try {
       if (data.role === 'user') {
         delete data.role;
@@ -44,7 +43,6 @@ export default function UserLogin() {
         } else {
           const responseData = await res.json();
           delete responseData.password;
-          //console.log(responseData);
           sessionStorage.setItem("user", responseData.donorEmailId);
           navigate('/user/dashboard');
         }
@@ -55,19 +53,17 @@ export default function UserLogin() {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(data),
         });
-
         if (!res.ok) {
           const msg = await res.text();
           console.log(msg);
           throw new Error(msg || 'Login failed');
         } else {
           const responseData = await res.json();
-          
           console.log(responseData);
-          
+          // sessionStorage.setItem("hospital", responseData.id);
+          // navigate('/hospital/dashbord');    
         }
       } else {
-        // bloodBank
         delete data.role;
         const res = await fetch(`${API_BASE}/BloodBankLogin`, {
           method: 'POST',
@@ -80,8 +76,10 @@ export default function UserLogin() {
           console.log(msg);
           throw new Error(msg || 'Login failed');
         } else {
-          const responseText = await res.text();
+          const responseText = await res.json();
           console.log(responseText);
+          sessionStorage.setItem("BloodBank", responseText.bloodBankId);
+          navigate('/bloodbank/dashbord');
         }
       }
     } catch (error) {

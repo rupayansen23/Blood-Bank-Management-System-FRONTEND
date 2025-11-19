@@ -17,8 +17,6 @@ export default function UserDashboard() {
         .catch((error) => console.log("Error in fetching user Information", error));
     }, [])
 
-    //console.log(donorBesicInfo);
-
     return (
         <div className="bg-white">
             <div><UserNavbar donorBesicInfo={donorBesicInfo}></UserNavbar></div>
