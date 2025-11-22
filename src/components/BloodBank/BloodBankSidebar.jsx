@@ -16,13 +16,15 @@ export default function BloodBankSidebar() {
                                 </li>
                             </Link>
                         </div>
-                         <div className="mb-4">
-                            
-                        
-                         </div>
                         <div className="mb-4">
-                        
-                        
+                            <Link to="bloodrequest">
+                                <li className="flex cursor-pointer items-center justify-center gap-3 bg-pink-200 hover:bg-pink-300 px-4 py-2 rounded-lg shadow-md hover:shadow-lg transition text-center">
+                                    <span>Requests</span>
+                                </li>
+                            </Link>                        
+                        </div>
+                        <div className="mb-4">
+
                         </div>
                         <div className="mb-4">
                             
