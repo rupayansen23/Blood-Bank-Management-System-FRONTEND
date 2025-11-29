@@ -21,6 +21,8 @@ import HospitalDashboard from './pages/Hospital/HospitalDashboard'
 import BloodBankDashbord from './pages/BloodBank/BloodBankDashbord'
 import BloodBankInfo from './pages/BloodBank/BloodBankInfo'
 import BloodRequests from './pages/BloodBank/BloodRequests'
+import UserDonations from './pages/User/userDonations'
+import DonateRequests from './pages/BloodBank/DonateRequests'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -44,11 +46,13 @@ function App() {
         </Route>
         <Route path="/user/dashboard" element={<UserDashboard></UserDashboard>}>
           <Route path="userInfo" element={<UserInfo></UserInfo>}></Route>
+          <Route path="donations" element={<UserDonations></UserDonations>}></Route>
         </Route>
         <Route path="/hospital/dashbord" element={<HospitalDashboard></HospitalDashboard>}></Route>
         <Route path="/bloodbank/dashbord" element={<BloodBankDashbord></BloodBankDashbord>}>
           <Route path="bloodbankinfo" element={<BloodBankInfo></BloodBankInfo>}></Route>
           <Route path="bloodrequest" element={<BloodRequests></BloodRequests>}></Route>
+          <Route path="donaterequest" element={<DonateRequests></DonateRequests>}></Route>
         </Route>
       </Routes>
     </Provider>

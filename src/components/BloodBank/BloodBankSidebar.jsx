@@ -24,7 +24,11 @@ export default function BloodBankSidebar() {
                             </Link>                        
                         </div>
                         <div className="mb-4">
-
+                            <Link to="donaterequest">
+                                <li className="flex cursor-pointer items-center justify-center gap-3 bg-pink-200 hover:bg-pink-300 px-4 py-2 rounded-lg shadow-md hover:shadow-lg transition text-center">
+                                    <span>Donate Requests</span>
+                                </li>
+                            </Link>
                         </div>
                         <div className="mb-4">
                             

@@ -1,5 +1,4 @@
 import BloodBankInformations from "../../components/BloodBank/BloodBankInformations";
-
 export default function BloodBankInfo() {
     return(
         <div className="w-full h-screen">
