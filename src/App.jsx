@@ -23,12 +23,11 @@ import BloodBankInfo from './pages/BloodBank/BloodBankInfo'
 import BloodRequests from './pages/BloodBank/BloodRequests'
 import UserDonations from './pages/User/userDonations'
 import DonateRequests from './pages/BloodBank/DonateRequests'
-
 function App() {
   const [count, setCount] = useState(0)
 
   return (
-    <Provider store={store}> 
+    <Provider store={store}>
       <Routes>
         <Route path="/" element={<HomePage></HomePage>}></Route>
         <Route path="/adminlogin" element={<Login></Login>}></Route>

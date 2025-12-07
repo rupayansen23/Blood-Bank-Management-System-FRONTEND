@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { setAdmin } from '../../Store/AdminSlice';
-//const API_BASE = 'http://localhost:8081';
+import { toast } from 'react-toastify';
 const API_BASE = import.meta.env.VITE_API_BASE_URL;
 
 
@@ -42,11 +42,13 @@ export default function Login() {
       else {
         let data = await res.json();
         dispatch(setAdmin(data))
+        toast.success("Login Success");
         navigate('/admin/dashboard');
       }
     }
     catch(error) {
       console.log(error, error.message);
+      toast.warning("Invalid Credentials");
     }
   };
 

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { toast } from "react-toastify";
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL;
 
@@ -11,7 +12,7 @@ const schema = z
     bloodBankName: z.string().min(1, "Blood Bank Name is required."),
     bloodBankAddress: z.string().optional().nullable(),
     bloodBankContactNumber: z.string().min(1, "Contact Number is required."),
-    userId: z.string().min(1, "User ID is required."),
+    adminID: z.string().min(1, "User ID is required."),
     password: z.string().min(6, "Password must be at least 6 characters."),
     confirmPassword: z.string().min(6, "Please confirm password."),
   })
@@ -35,7 +36,7 @@ export default function BloodBankForm({ onSaved, onCancel }) {
       bloodBankName: "",
       bloodBankAddress: "",
       bloodBankContactNumber: "",
-      userId: "",
+      adminID: "",
       password: "",
       confirmPassword: "",
     },
@@ -50,7 +51,7 @@ export default function BloodBankForm({ onSaved, onCancel }) {
         bloodBankName: values.bloodBankName.trim(),
         bloodBankAddress: values.bloodBankAddress?.trim() ?? "",
         bloodBankContactNumber: values.bloodBankContactNumber.trim(),
-        adminID: values.userId.trim(),
+        adminID: values.adminID.trim(),
         password: values.password,
       };
 
@@ -80,14 +81,15 @@ export default function BloodBankForm({ onSaved, onCancel }) {
               bloodBankName: payload.bloodBankName,
               bloodBankAddress: payload.bloodBankAddress,
               bloodBankContactNumber: payload.bloodBankContactNumber,
-              userId: payload.userId,
+              adminID: payload.adminID,
             };
-
+      toast.success("Blood Bank Registered Successfully!");
       onSaved && onSaved(created);
       reset();
     } catch (err) {
       console.error("Save error", err);
       setServerError(err?.message || "Save failed");
+      toast.error(err?.message || "Something went wrong while saving!");
     } finally {
       setSaving(false);
     }
@@ -131,11 +133,11 @@ export default function BloodBankForm({ onSaved, onCancel }) {
         <div>
           <label className="block text-sm font-medium text-gray-700">User ID</label>
           <input
-            {...register("userId")}
-            className={`mt-1 block w-full rounded-md border px-3 py-2 shadow-sm ${errors.userId ? "border-red-500" : "border-gray-300"}`}
+            {...register("adminID")}
+            className={`mt-1 block w-full rounded-md border px-3 py-2 shadow-sm ${errors.adminID ? "border-red-500" : "border-gray-300"}`}
             placeholder="Login user id for bank"
           />
-          {errors.userId && <p className="text-red-600 text-sm mt-1">{errors.userId.message}</p>}
+          {errors.adminID && <p className="text-red-600 text-sm mt-1">{errors.adminID.message}</p>}
         </div>
 
         <div>

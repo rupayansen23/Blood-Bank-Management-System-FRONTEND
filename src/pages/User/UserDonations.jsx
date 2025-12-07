@@ -1,3 +1,5 @@
+import DonateReqList from "../../components/User/DonateReqList"
+
 export default function UserDonations() {
     return(
         <div className="w-full h-screen">

@@ -5,7 +5,7 @@ import { negative, z } from 'zod';
 import Navbar from '../components/Navbar';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-
+import { toast } from 'react-toastify';
 const API_BASE = import.meta.env.VITE_API_BASE_URL;
 
 const signupSchema = z.object({
@@ -40,10 +40,12 @@ export default function UserLogin() {
           const msg = await res.text();
           console.log(msg);
           throw new Error(msg || 'Login failed');
+          
         } else {
           const responseData = await res.json();
           delete responseData.password;
-          sessionStorage.setItem("user", responseData.donorEmailId);
+          sessionStorage.setItem("user", responseData.donorId);
+          toast.success("Login Success");
           navigate('/user/dashboard');
         }
       } else if (data.role === 'hospital') {
@@ -57,11 +59,13 @@ export default function UserLogin() {
           const msg = await res.text();
           console.log(msg);
           throw new Error(msg || 'Login failed');
+          
         } else {
           const responseData = await res.json();
           console.log(responseData);
-          // sessionStorage.setItem("hospital", responseData.id);
-          // navigate('/hospital/dashbord');    
+          sessionStorage.setItem("hospital", responseData.id);
+          toast.success("Login Success");
+          navigate('/hospital/dashbord');    
         }
       } else {
         delete data.role;
@@ -75,15 +79,18 @@ export default function UserLogin() {
           const msg = await res.text();
           console.log(msg);
           throw new Error(msg || 'Login failed');
+          
         } else {
           const responseText = await res.json();
           console.log(responseText);
           sessionStorage.setItem("BloodBank", responseText.bloodBankId);
+          toast.success("Login Success");
           navigate('/bloodbank/dashbord');
         }
       }
     } catch (error) {
       console.log(error?.message || error);
+      toast.warning("Invalid Credentials");
     }
   };
 
