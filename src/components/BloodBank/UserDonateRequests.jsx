@@ -5,15 +5,19 @@ export default function UserDonateRequests() {
 
     const [donateReqInfo, setDonateReqInfo] = useState([]);
     const [updatingId, setUpdatingId] = useState(null);
-    const stored = sessionStorage.getItem("BloodBank");
+    const [filteredData, setFilteredData] = useState([]);
 
+    const stored = sessionStorage.getItem("BloodBank");
+    
      useEffect(()=>{
         fetch(`${BASE_API}/getReqByBloodBankId/${stored}`)
         .then((response) => response.json())
         .then((data) => setDonateReqInfo(data))
+        .then((donateReqInfo) => filterPending(donateReqInfo))
         .catch((error) => console.error("Error in fetching Donate Request Request data", error));
     }, [])
-    
+
+
     const handleStatusChange = async (requestId, newStatus)=>{
         try {
             setUpdatingId(requestId);
@@ -39,12 +43,31 @@ export default function UserDonateRequests() {
             setUpdatingId(null);
         }
     };
-
+    let flag = false;
+    const filterFullfiled = (donateReqInfo)=>{
+        setFilteredData(donateReqInfo.filter(data => data.requestStatus === "FULFILLED" ));
+    }
+    
+    const filterPending = (donateReqInfo)=>{
+        setFilteredData(donateReqInfo.filter(data => data.requestStatus === "PENDING"));
+        flag = true;
+    }
+    
+    const filterAssigned = (donateReqInfo)=>{
+        setFilteredData(donateReqInfo.filter(data => data.requestStatus === "ASSIGNED"))
+    }
+    
+    
     console.log(donateReqInfo);
 
     return(
         <div className="w-[100%] h-screen ">
             <div className=" w-full h-full ">
+                <div className="ml-5 mt-5">
+                    <button className="px-3 py-1 ml-5  rounded bg-red-700 text-white text-sm disabled:opacity-50 cursor-pointer" onClick={()=>filterPending()}>Pending</button>
+                    <button className="px-3 py-1 ml-5 rounded bg-red-700 text-white text-sm disabled:opacity-50 cursor-pointer" onClick={()=>filterAssigned(donateReqInfo)}>Assigned</button>
+                    <button className="px-3 py-1 ml-5 rounded bg-red-700 text-white text-sm disabled:opacity-50 cursor-pointer" onClick={()=>filterFullfiled(donateReqInfo)}>Fulfiled</button>
+                </div>
                 <div className="m-5 p-2 text-2xl">
                     <p>Pending Requests</p> 
                 </div>
@@ -58,12 +81,12 @@ export default function UserDonateRequests() {
                                 <td className="px-4 py-2 border">Quantigy</td>
                                 <td className="px-4 py-2 border">Gender</td>
                                 <td className="px-4 py-2 border">Status</td>
-                                <th className="border px-4 py-2">Actions</th>
+                                {flag && <td className="px-4 py-2 border">Actions</td>}
                             </tr>
                         </thead>
                         <tbody>
                             {
-                                donateReqInfo.map((data)=>(
+                                filteredData.map((data)=>(
                                     <tr key={data.reqId} className="text-center hover:bg-blue-50 transition">
                                         <td className="px-4 py-2 border">{data.reqId}</td>
                                         <td className="px-4 py-2 border">{data.donor.donorName}</td>
@@ -71,22 +94,24 @@ export default function UserDonateRequests() {
                                         <td className="px-4 py-2 border">{data.units}</td>
                                         <td className="px-4 py-2 border">{data.donor.donorGender}</td>
                                         <td className="px-4 py-2 border">{data.requestStatus}</td>
-                                        <td className="border px-4 py-2 space-x-2">
-                                        <button
-                                            className="px-3 py-1 rounded bg-green-500 text-white text-sm disabled:opacity-50 cursor-pointer"
-                                            onClick={() => handleStatusChange(data.id, "ASSIGNED")}
-                                            disabled={updatingId === data.id}
-                                        >
-                                            {updatingId === data.id ? "Updating..." : "Accept"}
-                                        </button>
-                                        <button
-                                            className="px-3 py-1 rounded bg-red-500 text-white text-sm disabled:opacity-50 cursor-pointer"
-                                            onClick={() => handleStatusChange(data.id, "REJECTED")}
-                                            disabled={updatingId === data.id}
-                                        >
-                                            Reject
-                                        </button>
+                                        {
+                                            flag && <td className="border px-4 py-2 space-x-2">
+                                            <button
+                                                className="px-3 py-1 rounded bg-green-500 text-white text-sm disabled:opacity-50 cursor-pointer"
+                                                onClick={() => handleStatusChange(data.id, "ASSIGNED")}
+                                                disabled={updatingId === data.id}
+                                            >
+                                                {updatingId === data.id ? "Updating..." : "Accept"}
+                                            </button>
+                                            <button
+                                                className="px-3 py-1 rounded bg-red-500 text-white text-sm disabled:opacity-50 cursor-pointer"
+                                                onClick={() => handleStatusChange(data.id, "REJECTED")}
+                                                disabled={updatingId === data.id}
+                                            >
+                                                Reject
+                                            </button>
                                         </td>
+                                        }
                                     </tr>
                                 ))
                             }
