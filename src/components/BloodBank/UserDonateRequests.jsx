@@ -6,6 +6,7 @@ export default function UserDonateRequests() {
     const [donateReqInfo, setDonateReqInfo] = useState([]);
     const [updatingId, setUpdatingId] = useState(null);
     const [filteredData, setFilteredData] = useState([]);
+    const [filterMode, setFilterMode]  = useState("PENDING");
 
     const stored = sessionStorage.getItem("BloodBank");
     
@@ -13,9 +14,26 @@ export default function UserDonateRequests() {
         fetch(`${BASE_API}/getReqByBloodBankId/${stored}`)
         .then((response) => response.json())
         .then((data) => setDonateReqInfo(data))
-        .then((donateReqInfo) => filterPending(donateReqInfo))
+        // .then((donateReqInfo) => filterPending(donateReqInfo))
         .catch((error) => console.error("Error in fetching Donate Request Request data", error));
-    }, [])
+    }, [stored]);
+
+    useEffect(()=>{
+        if(!Array.isArray(donateReqInfo)) {
+            setFilteredData([]);
+            return;
+        }        
+        const mode = filterMode;
+        if(mode === "PENDING") {
+            setFilteredData(donateReqInfo.filter((data) => data.requestStatus === "PENDING"));
+        } else if(mode === "FULFILED") {
+            setFilteredData(donateReqInfo.filter((data) => data.requestStatus === "FULFILLED"));
+        } else if(mode === "ASSIGNED") {
+            setFilteredData(donateReqInfo.filter((data) => data.requestStatus === "ASSIGNED"));
+        } else {
+            setFilteredData(donateReqInfo);
+        }
+    }, [filterMode, donateReqInfo])
 
 
     const handleStatusChange = async (requestId, newStatus)=>{
@@ -32,7 +50,7 @@ export default function UserDonateRequests() {
                 }
             );
             if(!resp.ok) throw new Error("Failed to update status");
-            const updateRequest = resp.json();
+            const updateRequest = await resp.json();
             setDonateReqInfo(
                 (prev) => prev.map((sinReq)=> sinReq.reqId === requestId ? sinReq.requestStatus = updateRequest.status : sinReq.requestStatus)
             );
@@ -43,19 +61,34 @@ export default function UserDonateRequests() {
             setUpdatingId(null);
         }
     };
-    let flag = false;
-    const filterFullfiled = (donateReqInfo)=>{
-        setFilteredData(donateReqInfo.filter(data => data.requestStatus === "FULFILLED" ));
+
+    const handleStatusChange2 = async(requestId, newStatus) => {
+        try {
+            const resp = await fetch(
+                `${BASE_API}/fulfil-donate-req/${requestId}`,
+                {
+                    method: "PATCH",
+                    headers : {
+                        "Content-Type": "application/json",
+                    },
+                    body : JSON.stringify({status:newStatus})
+                }
+            );
+            if(!resp.ok) throw new Error("Failed to update status");
+            const updateRequest = await resp.json();
+            setDonateReqInfo((prev) =>
+                prev.map((sinReq) =>
+                    sinReq.reqId === requestId ? { ...sinReq, requestStatus: updateRequest.status } : sinReq
+                )
+            );
+        }
+        catch(err) {
+            console.error(err);
+        }
     }
-    
-    const filterPending = (donateReqInfo)=>{
-        setFilteredData(donateReqInfo.filter(data => data.requestStatus === "PENDING"));
-        flag = true;
-    }
-    
-    const filterAssigned = (donateReqInfo)=>{
-        setFilteredData(donateReqInfo.filter(data => data.requestStatus === "ASSIGNED"))
-    }
+
+    const showActions = filterMode === "PENDING";
+    const showFulfilledColumn = filterMode === "ASSIGNED";
     
     
     console.log(donateReqInfo);
@@ -64,9 +97,21 @@ export default function UserDonateRequests() {
         <div className="w-[100%] h-screen ">
             <div className=" w-full h-full ">
                 <div className="ml-5 mt-5">
-                    <button className="px-3 py-1 ml-5  rounded bg-red-700 text-white text-sm disabled:opacity-50 cursor-pointer" onClick={()=>filterPending()}>Pending</button>
-                    <button className="px-3 py-1 ml-5 rounded bg-red-700 text-white text-sm disabled:opacity-50 cursor-pointer" onClick={()=>filterAssigned(donateReqInfo)}>Assigned</button>
-                    <button className="px-3 py-1 ml-5 rounded bg-red-700 text-white text-sm disabled:opacity-50 cursor-pointer" onClick={()=>filterFullfiled(donateReqInfo)}>Fulfiled</button>
+                    <button 
+                        className="px-3 py-1 ml-5  rounded bg-red-700 text-white text-sm disabled:opacity-50 cursor-pointer" 
+                        onClick={()=>setFilterMode("PENDING")}
+                    >Pending
+                    </button>
+                    <button 
+                        className="px-3 py-1 ml-5 rounded bg-red-700 text-white text-sm disabled:opacity-50 cursor-pointer" 
+                        onClick={()=>setFilterMode("ASSIGNED")}
+                    >Assigned
+                    </button>
+                    <button 
+                        className="px-3 py-1 ml-5 rounded bg-red-700 text-white text-sm disabled:opacity-50 cursor-pointer" 
+                        onClick={()=>setFilterMode("FULFILED")}
+                    >Fulfiled
+                    </button>
                 </div>
                 <div className="m-5 p-2 text-2xl">
                     <p>Pending Requests</p> 
@@ -81,7 +126,8 @@ export default function UserDonateRequests() {
                                 <td className="px-4 py-2 border">Quantigy</td>
                                 <td className="px-4 py-2 border">Gender</td>
                                 <td className="px-4 py-2 border">Status</td>
-                                {flag && <td className="px-4 py-2 border">Actions</td>}
+                                {showActions && <td className="px-4 py-2 border">Actions</td>}
+                                {showFulfilledColumn && <td className="px-4 py-2 border">Fulfilled</td>}
                             </tr>
                         </thead>
                         <tbody>
@@ -95,7 +141,7 @@ export default function UserDonateRequests() {
                                         <td className="px-4 py-2 border">{data.donor.donorGender}</td>
                                         <td className="px-4 py-2 border">{data.requestStatus}</td>
                                         {
-                                            flag && <td className="border px-4 py-2 space-x-2">
+                                            showActions && <td className="border px-4 py-2 space-x-2">
                                             <button
                                                 className="px-3 py-1 rounded bg-green-500 text-white text-sm disabled:opacity-50 cursor-pointer"
                                                 onClick={() => handleStatusChange(data.id, "ASSIGNED")}
@@ -112,6 +158,16 @@ export default function UserDonateRequests() {
                                             </button>
                                         </td>
                                         }
+                                         {showFulfilledColumn && (
+                                            <td className="border px-4 py-2">
+                                                <input
+                                                    type="checkbox"
+                                                    className="w-5 h-5 cursor-pointer"
+                                                    onChange={() => handleStatusChange2(data.reqId, "FULFILLED")}
+                                                />
+                                            </td>
+                                        )}
+
                                     </tr>
                                 ))
                             }
