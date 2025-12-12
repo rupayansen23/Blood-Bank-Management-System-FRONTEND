@@ -18,6 +18,8 @@ export default function UserDonateRequests() {
         .catch((error) => console.error("Error in fetching Donate Request Request data", error));
     }, [stored]);
 
+    console.log(donateReqInfo);
+    
     useEffect(()=>{
         if(!Array.isArray(donateReqInfo)) {
             setFilteredData([]);
@@ -52,7 +54,7 @@ export default function UserDonateRequests() {
             if(!resp.ok) throw new Error("Failed to update status");
             const updateRequest = await resp.json();
             setDonateReqInfo(
-                (prev) => prev.map((sinReq)=> sinReq.reqId === requestId ? sinReq.requestStatus = updateRequest.status : sinReq.requestStatus)
+                (prev) => prev.map((sinReq)=> sinReq.requestId === requestId ? sinReq.requestStatus = updateRequest.status : sinReq.requestStatus)
             );
         }
         catch(err) {
@@ -78,7 +80,7 @@ export default function UserDonateRequests() {
             const updateRequest = await resp.json();
             setDonateReqInfo((prev) =>
                 prev.map((sinReq) =>
-                    sinReq.reqId === requestId ? { ...sinReq, requestStatus: updateRequest.status } : sinReq
+                    sinReq.requestId === requestId ? { ...sinReq, requestStatus: updateRequest.status } : sinReq
                 )
             );
         }
@@ -89,7 +91,6 @@ export default function UserDonateRequests() {
 
     const showActions = filterMode === "PENDING";
     const showFulfilledColumn = filterMode === "ASSIGNED";
-    
     
     console.log(donateReqInfo);
 
@@ -133,26 +134,26 @@ export default function UserDonateRequests() {
                         <tbody>
                             {
                                 filteredData.map((data)=>(
-                                    <tr key={data.reqId} className="text-center hover:bg-blue-50 transition">
-                                        <td className="px-4 py-2 border">{data.reqId}</td>
-                                        <td className="px-4 py-2 border">{data.donor.donorName}</td>
-                                        <td className="px-4 py-2 border">{data.bloodGroup}</td>
-                                        <td className="px-4 py-2 border">{data.units}</td>
-                                        <td className="px-4 py-2 border">{data.donor.donorGender}</td>
-                                        <td className="px-4 py-2 border">{data.requestStatus}</td>
+                                    <tr key={data.requestId} className="text-center hover:bg-blue-50 transition">
+                                        <td className="px-4 py-2 border">{data?.requestId}</td>
+                                        <td className="px-4 py-2 border">{data?.donorDTO?.donorName}</td>
+                                        <td className="px-4 py-2 border">{data?.donorDTO?.donorBloodGroup}</td>
+                                        <td className="px-4 py-2 border">{data?.unites}</td>
+                                        <td className="px-4 py-2 border">{data?.donorDTO?.donorGender}</td>
+                                        <td className="px-4 py-2 border">{data?.requestStatus}</td>
                                         {
                                             showActions && <td className="border px-4 py-2 space-x-2">
                                             <button
                                                 className="px-3 py-1 rounded bg-green-500 text-white text-sm disabled:opacity-50 cursor-pointer"
-                                                onClick={() => handleStatusChange(data.id, "ASSIGNED")}
-                                                disabled={updatingId === data.id}
+                                                onClick={() => handleStatusChange(data.requestId, "ASSIGNED")}
+                                                disabled={updatingId === data.reqId}
                                             >
                                                 {updatingId === data.id ? "Updating..." : "Accept"}
                                             </button>
                                             <button
                                                 className="px-3 py-1 rounded bg-red-500 text-white text-sm disabled:opacity-50 cursor-pointer"
                                                 onClick={() => handleStatusChange(data.id, "REJECTED")}
-                                                disabled={updatingId === data.id}
+                                                disabled={updatingId === data.requestId}
                                             >
                                                 Reject
                                             </button>
@@ -163,7 +164,7 @@ export default function UserDonateRequests() {
                                                 <input
                                                     type="checkbox"
                                                     className="w-5 h-5 cursor-pointer"
-                                                    onChange={() => handleStatusChange2(data.reqId, "FULFILLED")}
+                                                    onChange={() => handleStatusChange2(data.requestId, "FULFILLED")}
                                                 />
                                             </td>
                                         )}

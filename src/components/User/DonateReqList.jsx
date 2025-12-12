@@ -40,13 +40,13 @@ export default function DonateReqList() {
                             {
                                 donateReqList.map((data)=>(
                                     <tr key={data.reqId} className="text-center hover:bg-blue-50 transition">
-                                        <td className="px-4 py-2 border">{data.requestId}</td>
-                                        <td className="px-4 py-2 border">{data.donorDTO.donorName}</td>
-                                        <td className="px-4 py-2 border">{data.donorDTO.donorBloodGroup}</td>
-                                        <td className="px-4 py-2 border">{data.unites}</td>
-                                        <td className="px-4 py-2 border">{data.donorDTO.donorGender}</td>
-                                        <td className="px-4 py-2 border">{data.requestStatus}</td>
-                                        <td className="px-4 py-2 border">{data.bloodBankName}</td>
+                                        <td className="px-4 py-2 border">{data?.requestId}</td>
+                                        <td className="px-4 py-2 border">{data?.donorDTO?.donorName}</td>
+                                        <td className="px-4 py-2 border">{data?.donorDTO?.donorBloodGroup}</td>
+                                        <td className="px-4 py-2 border">{data?.unites}</td>
+                                        <td className="px-4 py-2 border">{data?.donorDTO?.donorGender}</td>
+                                        <td className="px-4 py-2 border">{data?.requestStatus}</td>
+                                        <td className="px-4 py-2 border">{data?.bloodBankName}</td>
                                     </tr>
                                 ))
                             }
