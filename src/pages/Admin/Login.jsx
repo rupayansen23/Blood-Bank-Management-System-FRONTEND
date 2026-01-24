@@ -43,7 +43,7 @@ export default function Login() {
         let data = await res.json();
         dispatch(setAdmin(data))
         toast.success("Login Success");
-        navigate('/admin/dashboard');
+        navigate('/admin/dashboard/home');
       }
     }
     catch(error) {
