@@ -1,4 +1,9 @@
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+
 export default function UserNavbar({donorBesicInfo}) {
+
+    const navigate = useNavigate();
 
     const getInitials = (name) => {
         if (!name) return "U";
@@ -11,6 +16,12 @@ export default function UserNavbar({donorBesicInfo}) {
     };
 
     const initials = getInitials(donorBesicInfo?.donorName);
+
+    const handleLogout = () => {
+        sessionStorage.clear();
+        toast.success("Log out success");
+        navigate("/login");
+    }
 
     return (
        <div className="flex justify-between items-center bg-gradient-to-r from-red-900 via-red-700 to-red-500 shadow-md text-white">
@@ -25,6 +36,12 @@ export default function UserNavbar({donorBesicInfo}) {
                 <div className="w-12 h-12 rounded-full bg-white shadow-lg flex items-center justify-center font-bold text-red-700 text-lg">
                     {initials}
                 </div>
+                <button 
+                    onClick={handleLogout}
+                    className="px-4 py-2 bg-white text-red-700 font-semibold rounded hover:bg-red-100 transition"
+                >
+                    Logout
+                </button>
             </div>
         </div>
     )

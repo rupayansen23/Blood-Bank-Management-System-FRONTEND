@@ -48,13 +48,13 @@ export default function UserDonateRequests() {
                     headers : {
                         "Content-Type": "application/json",
                     },
-                    body : JSON.stringify({status:newStatus})
+                    body : JSON.stringify({status:newStatus, bloodBankId:stored})
                 }
             );
             if(!resp.ok) throw new Error("Failed to update status");
             const updateRequest = await resp.json();
             setDonateReqInfo(
-                (prev) => prev.map((sinReq)=> sinReq.requestId === requestId ? sinReq.requestStatus = updateRequest.status : sinReq.requestStatus)
+                (prev) => prev.map((sinReq)=> sinReq.requestId === requestId ? { ...sinReq, requestStatus: updateRequest.status } : sinReq)
             );
         }
         catch(err) {
@@ -73,7 +73,7 @@ export default function UserDonateRequests() {
                     headers : {
                         "Content-Type": "application/json",
                     },
-                    body : JSON.stringify({status:newStatus})
+                    body : JSON.stringify({status:newStatus, bloodBankId:stored})
                 }
             );
             if(!resp.ok) throw new Error("Failed to update status");
