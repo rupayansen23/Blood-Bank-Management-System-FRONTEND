@@ -18,6 +18,9 @@ import UserDashboard from './pages/User/UserDashboard'
 import UserInfo from './pages/User/UserInfo'
 import UserLogin from './pages/UserLogin'
 import HospitalDashboard from './pages/Hospital/HospitalDashboard'
+import HospitalHome from './components/Hospital/HospitalHome'
+import HospitalInformations from './components/Hospital/HospitalInformations'
+import BloodRequestsList from './components/Hospital/BloodRequestsList'
 import BloodBankDashbord from './pages/BloodBank/BloodBankDashbord'
 import BloodBankInfo from './pages/BloodBank/BloodBankInfo'
 import BloodRequests from './pages/BloodBank/BloodRequests'
@@ -47,7 +50,11 @@ function App() {
           <Route path="userInfo" element={<UserInfo></UserInfo>}></Route>
           <Route path="donations" element={<UserDonations></UserDonations>}></Route>
         </Route>
-        <Route path="/hospital/dashbord" element={<HospitalDashboard></HospitalDashboard>}></Route>
+        <Route path="/hospital/dashbord" element={<HospitalDashboard></HospitalDashboard>}>
+          <Route path="home" element={<HospitalHome></HospitalHome>}></Route>
+          <Route path="info" element={<HospitalInformations></HospitalInformations>}></Route>
+          <Route path="requests" element={<BloodRequestsList></BloodRequestsList>}></Route>
+        </Route>
         <Route path="/bloodbank/dashbord" element={<BloodBankDashbord></BloodBankDashbord>}>
           <Route path="bloodbankinfo" element={<BloodBankInfo></BloodBankInfo>}></Route>
           <Route path="bloodrequest" element={<BloodRequests></BloodRequests>}></Route>
