@@ -9,7 +9,7 @@ export default function HospitalDashboard() {
     const stored = sessionStorage.getItem("hospital");
 
     useEffect(() => {
-        fetch(`${API_BASE}/hospitalInfo/${stored}`)
+        fetch(`${API_BASE}/fetchHospitalById/${stored}`)
             .then((response) => response.json())
             .then((data) => {
                 console.log(data);

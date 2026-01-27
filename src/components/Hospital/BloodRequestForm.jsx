@@ -4,24 +4,27 @@ import { z } from "zod";
 import { useOutletContext } from "react-router-dom";
 import { toast } from "react-toastify";
 import { X } from "lucide-react";
+import { useState, useEffect } from "react";
+
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL;
 
 const bloodRequestSchema = z.object({
-    bloodGroup: z.enum(["O_POSITIVE", "O_NEGATIVE", "A_POSITIVE", "A_NEGATIVE", "B_POSITIVE", "B_NEGATIVE", "AB_POSITIVE", "AB_NEGATIVE"], {
+    bloodGroup: z.enum(["A_POS", "A_NEG", "B_POS", "B_NEG", "AB_POS", "AB_NEG", "O_POS", "O_NEG"], {
         errorMap: () => ({ message: "Select a valid blood group" }),
     }),
     quantity: z.coerce.number().min(1, "Quantity must be at least 1").max(100, "Quantity cannot exceed 100"),
-    priority: z.enum(["LOW", "MEDIUM", "HIGH", "CRITICAL"], {
+    priority: z.enum(["LOW", "NORMAL", "HIGH", "EMERGENCY"], {
         errorMap: () => ({ message: "Select a priority level" }),
     }),
-    requestTo: z.string().min(1, "This field is required").max(100, "Maximum 100 characters"),
+    requestTo: z.string().nonempty("Please select a blood bank")
 });
 
 export default function BloodRequestForm({ onClose, onSuccess }) {
     const ctx = useOutletContext();
+    const [bloodBanks, setBloodBanks] = useState([]);
     const hospitalInfo = (ctx && (ctx.hospitalInfo ?? ctx)) || {};
-    const hospitalId = hospitalInfo.id;
+    const hospitalId = hospitalInfo.hospitalId;
 
     const {
         register,
@@ -31,6 +34,32 @@ export default function BloodRequestForm({ onClose, onSuccess }) {
     } = useForm({
         resolver: zodResolver(bloodRequestSchema),
     });
+    
+    useEffect(() => {
+        const fetchBloodBanks = async () => {
+            try {
+                const res = await fetch(`${API_BASE}/getAllBloodBanks`);
+                console.log(res);
+                if (!res.ok) {
+                    throw new Error(`HTTP error! Status: ${res.status}`);
+                }
+    
+                const data = await res.json();
+    
+                if (Array.isArray(data)) {
+                    setBloodBanks(data);
+                } else {
+                    console.error("Unexpected response format:", data);
+                    setBloodBanks([]);
+                }
+            } catch (error) {
+                console.error("Error fetching blood banks:", error);
+                toast.error("Failed to load blood banks");
+            }
+        };
+    
+        fetchBloodBanks();
+    }, []);
 
     const onSubmit = async (data) => {
         try {
@@ -67,17 +96,17 @@ export default function BloodRequestForm({ onClose, onSuccess }) {
     };
 
     const bloodGroups = [
-        "O_POSITIVE",
-        "O_NEGATIVE",
-        "A_POSITIVE",
-        "A_NEGATIVE",
-        "B_POSITIVE",
-        "B_NEGATIVE",
-        "AB_POSITIVE",
-        "AB_NEGATIVE",
+        { label: "A+", value: "A_POS" },
+        { label: "A-", value: "A_NEG" },
+        { label: "B+", value: "B_POS" },
+        { label: "B-", value: "B_NEG" },
+        { label: "AB+", value: "AB_POS" },
+        { label: "AB-", value: "AB_NEG" },
+        { label: "O+", value: "O_POS" },
+        { label: "O-", value: "O_NEG" },
     ];
 
-    const priorities = ["LOW", "MEDIUM", "HIGH", "CRITICAL"];
+    const priorities = ["LOW", "NORMAL", "HIGH", "EMERGENCY"];
 
     return (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
@@ -109,11 +138,12 @@ export default function BloodRequestForm({ onClose, onSuccess }) {
                             }`}
                         >
                             <option value="">Select blood group</option>
-                            {bloodGroups.map((group) => (
-                                <option key={group} value={group}>
-                                    {group.replace("_", " ")}
-                                </option>
-                            ))}
+                                {bloodGroups.map((group) => (
+                                    <option key={group.value} value={group.value}>
+                                        {group.label}
+                                    </option>
+                                ))}
+
                         </select>
                         {errors.bloodGroup && (
                             <span className="text-red-500 text-sm mt-2 font-medium">{errors.bloodGroup.message}</span>
@@ -170,16 +200,26 @@ export default function BloodRequestForm({ onClose, onSuccess }) {
                         <label className="label pb-2">
                             <span className="label-text font-semibold text-gray-700">Request To (Blood Bank/Donor)</span>
                         </label>
-                        <input
-                            type="text"
-                            placeholder="Enter recipient name or blood bank name"
-                            className={`input w-full px-4 py-3 border-2 rounded-xl bg-gray-50 transition-all duration-200 focus:outline-none ${
+                        <select
+                            className={`select w-full px-4 py-3 border-2 rounded-xl bg-gray-50 transition-all duration-200 focus:outline-none ${
                                 errors.requestTo
                                     ? "border-red-500 focus:border-red-500 focus:ring-2 focus:ring-red-200"
                                     : "border-gray-200 focus:border-red-400 focus:ring-2 focus:ring-red-100 hover:border-gray-300"
                             }`}
-                            {...register("requestTo")}
-                        />
+                            {...register("requestTo", { required: "Please select a blood bank" })}
+                        >
+                            <option value="">Select Blood Bank</option>
+
+                            {bloodBanks.map((bb) => (
+                                <option
+                                    key={bb.bloodBankId}
+                                    value={bb.bloodBankName}
+                                >
+                                    {bb.bloodBankName}
+                                </option>
+                            ))}
+                        </select>
+
                         {errors.requestTo && (
                             <span className="text-red-500 text-sm mt-2 font-medium">{errors.requestTo.message}</span>
                         )}

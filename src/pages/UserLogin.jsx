@@ -62,7 +62,7 @@ export default function UserLogin() {
         } else {
           const responseData = await res.json();
           console.log(responseData);
-          sessionStorage.setItem("hospital", responseData.id);
+          sessionStorage.setItem("hospital", responseData.hospitalId);
           toast.success("Login Success");
           navigate('/hospital/dashbord');    
         }

@@ -1,21 +1,23 @@
-import { useOutletContext } from "react-router-dom";
-import { Heart, Users, Droplet, AlertCircle } from "lucide-react";
+import { useOutletContext, useNavigate } from "react-router-dom";
+import { AlertCircle } from "lucide-react";
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
 
 export default function HospitalHome() {
+    const navigate = useNavigate();
     const ctx = useOutletContext();
     const hospitalInfo = (ctx && (ctx.hospitalInfo ?? ctx)) || {};
 
-    const StatCard = ({ icon: Icon, label, value, color }) => (
-        <div className={`${color} rounded-lg shadow-md p-6 flex items-center gap-4`}>
-            <div className={`w-16 h-16 rounded-full flex items-center justify-center text-white`}>
-                <Icon size={32} />
-            </div>
-            <div>
-                <p className="text-white text-sm font-medium">{label}</p>
-                <p className="text-white text-3xl font-bold">{value}</p>
-            </div>
-        </div>
-    );
+    // Sample blood inventory data by blood group
+    const bloodData = [
+        { bloodGroup: "O+", amount: 45 },
+        { bloodGroup: "O-", amount: 32 },
+        { bloodGroup: "A+", amount: 38 },
+        { bloodGroup: "A-", amount: 28 },
+        { bloodGroup: "B+", amount: 42 },
+        { bloodGroup: "B-", amount: 25 },
+        { bloodGroup: "AB+", amount: 20 },
+        { bloodGroup: "AB-", amount: 15 },
+    ];
 
     return (
         <div className="w-full bg-gray-50 p-6 min-h-screen">
@@ -28,74 +30,57 @@ export default function HospitalHome() {
                     <p className="text-gray-600 mt-2">Manage blood requests and hospital information efficiently</p>
                 </div>
 
-                {/* Stats Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                    <StatCard
-                        icon={Heart}
-                        label="Hospital Status"
-                        value="Active"
-                        color="bg-gradient-to-br from-red-500 to-red-600"
-                    />
-                    <StatCard
-                        icon={Droplet}
-                        label="Blood Groups"
-                        value="8"
-                        color="bg-gradient-to-br from-orange-500 to-orange-600"
-                    />
-                    <StatCard
-                        icon={Users}
-                        label="Location"
-                        value={hospitalInfo.city || "—"}
-                        color="bg-gradient-to-br from-blue-500 to-blue-600"
-                    />
-                    <StatCard
-                        icon={AlertCircle}
-                        label="Contact"
-                        value={hospitalInfo.contactNumber || "—"}
-                        color="bg-gradient-to-br from-purple-500 to-purple-600"
-                    />
-                </div>
-
-                {/* Information Sections */}
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    {/* Hospital Details */}
-                    <div className="bg-white rounded-lg shadow-lg p-6 border-t-4 border-red-500">
-                        <h2 className="text-2xl font-bold text-gray-900 mb-4">Hospital Details</h2>
-                        <div className="space-y-4">
-                            <div className="flex justify-between items-center pb-3 border-b border-gray-200">
-                                <span className="text-gray-600 font-medium">Hospital Name:</span>
-                                <span className="text-gray-900 font-semibold">{hospitalInfo.hospitalName || "—"}</span>
-                            </div>
-                            <div className="flex justify-between items-center pb-3 border-b border-gray-200">
-                                <span className="text-gray-600 font-medium">City:</span>
-                                <span className="text-gray-900 font-semibold">{hospitalInfo.city || "—"}</span>
-                            </div>
-                            <div className="flex justify-between items-center pb-3 border-b border-gray-200">
-                                <span className="text-gray-600 font-medium">Email:</span>
-                                <span className="text-gray-900 font-semibold break-all">{hospitalInfo.email || "—"}</span>
-                            </div>
-                            <div className="flex justify-between items-center">
-                                <span className="text-gray-600 font-medium">Contact:</span>
-                                <span className="text-gray-900 font-semibold">{hospitalInfo.contactNumber || "—"}</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Quick Actions */}
-                    <div className="bg-white rounded-lg shadow-lg p-6 border-t-4 border-blue-500">
+                {/* Quick Actions */}
+                <div className="mb-8 bg-white rounded-lg shadow-lg p-6 border-t-4 border-blue-500">
                         <h2 className="text-2xl font-bold text-gray-900 mb-4">Quick Actions</h2>
-                        <div className="space-y-3">
-                            <button className="w-full px-4 py-3 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white font-semibold rounded-lg transition shadow-md hover:shadow-lg">
+
+                        <div className="flex gap-4 flex-nowrap">
+                            <button
+                                onClick={() => navigate("/hospital/dashbord/requests")}
+                                className="px-4 py-3 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white font-semibold rounded-lg transition shadow-md hover:shadow-lg cursor-pointer"
+                            >
                                 Request Blood
                             </button>
-                            <button className="w-full px-4 py-3 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold rounded-lg transition shadow-md hover:shadow-lg">
+
+                            <button
+                                onClick={() => navigate("/hospital/dashbord/requests")}
+                                className="px-4 py-3 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold rounded-lg transition shadow-md hover:shadow-lg cursor-pointer"
+                            >
                                 View Your Requests
                             </button>
-                            <button className="w-full px-4 py-3 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-semibold rounded-lg transition shadow-md hover:shadow-lg">
+
+                            <button
+                                onClick={() => navigate("/hospital/dashbord/info")}
+                                className="px-4 py-3 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-semibold rounded-lg transition shadow-md hover:shadow-lg cursor-pointer"
+                            >
                                 Update Profile
                             </button>
                         </div>
                     </div>
+                {/* Blood Groups Bar Chart */}
+                <div className="mb-8 bg-white rounded-lg shadow-lg p-6 border-t-4 border-red-500">
+                    <h2 className="text-2xl font-bold text-gray-900 mb-6">Blood Inventory by Blood Group</h2>
+                    <ResponsiveContainer width="100%" height={400}>
+                        <BarChart
+                            data={bloodData}
+                            margin={{ top: 20, right: 30, left: 0, bottom: 5 }}
+                        >
+                            <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" />
+                            <XAxis dataKey="bloodGroup" stroke="#666" />
+                            <YAxis stroke="#666" label={{ value: "Units (ml)", angle: -90, position: "insideLeft" }} />
+                            <Tooltip 
+                                contentStyle={{ backgroundColor: "#f9fafb", border: "1px solid #e5e7eb" }}
+                                formatter={(value) => `${value} units`}
+                            />
+                            <Legend />
+                            <Bar 
+                                dataKey="amount" 
+                                name="Available Units" 
+                                fill="#ef4444" 
+                                radius={[8, 8, 0, 0]}
+                            />
+                        </BarChart>
+                    </ResponsiveContainer>
                 </div>
 
                 {/* Important Note */}

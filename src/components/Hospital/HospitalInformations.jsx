@@ -54,36 +54,26 @@ export default function HospitalInformations() {
                         </div>
                         <div>
                             <h2 className="text-3xl font-bold text-gray-900">{makeDisplayValue(hospitalInfo.hospitalName)}</h2>
-                            <p className="text-gray-600 text-lg mt-1">Hospital ID: {makeDisplayValue(hospitalInfo.id)}</p>
+                            <p className="text-gray-600 text-lg mt-1">Hospital ID: {makeDisplayValue(hospitalInfo.hospitalId)}</p>
                         </div>
                     </div>
 
                     {/* Information Grid */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="grid grid-cols-3 gap-6">
                         <InfoField
                             icon={Mail}
                             label="Email Address"
-                            value={makeDisplayValue(hospitalInfo.email)}
+                            value={makeDisplayValue(hospitalInfo.adminID)}
                         />
                         <InfoField
                             icon={Phone}
                             label="Contact Number"
-                            value={makeDisplayValue(hospitalInfo.contactNumber)}
-                        />
-                        <InfoField
-                            icon={MapPin}
-                            label="City"
-                            value={makeDisplayValue(hospitalInfo.city)}
+                            value={makeDisplayValue(hospitalInfo.hospitalContactNumber)}
                         />
                         <InfoField
                             icon={Building2}
                             label="Address"
-                            value={makeDisplayValue(hospitalInfo.address)}
-                        />
-                        <InfoField
-                            icon={Stethoscope}
-                            label="Hospital Type"
-                            value={makeDisplayValue(hospitalInfo.hospitalType)}
+                            value={makeDisplayValue(hospitalInfo.hospitalAddress)}
                         />
                     </div>
                 </div>

@@ -9,16 +9,16 @@ const API_BASE = import.meta.env.VITE_API_BASE_URL;
 export default function BloodRequestsList() {
     const ctx = useOutletContext();
     const hospitalInfo = (ctx && (ctx.hospitalInfo ?? ctx)) || {};
-    const hospitalId = hospitalInfo.id;
+    const hospitalId = hospitalInfo.hospitalId;
 
     const [requests, setRequests] = useState([]);
     const [loading, setLoading] = useState(false);
     const [showForm, setShowForm] = useState(false);
-
+    
     const fetchRequests = async () => {
         setLoading(true);
         try {
-            const res = await fetch(`${API_BASE}/bloodRequests/${hospitalId}`);
+            const res = await fetch(`${API_BASE}/bloodReqByHospital/${hospitalId}`);
             if (!res.ok) {
                 throw new Error("Failed to fetch requests");
             }
@@ -127,11 +127,11 @@ export default function BloodRequestsList() {
                                 <tbody>
                                     {requests.map((request, index) => (
                                         <tr
-                                            key={request.id || index}
+                                            key={request.reqId || index}
                                             className="border-b border-gray-200 hover:bg-gray-50 transition"
                                         >
                                             <td className="px-6 py-4 text-sm text-gray-700 font-semibold">
-                                                #{request.id}
+                                                #{request.reqId}
                                             </td>
                                             <td className="px-6 py-4 text-sm">
                                                 <span className="inline-block px-4 py-2 bg-red-100 text-red-800 border border-red-300 rounded-full font-semibold">
@@ -151,7 +151,7 @@ export default function BloodRequestsList() {
                                                 </span>
                                             </td>
                                             <td className="px-6 py-4 text-sm text-gray-700">
-                                                {request.requestTo}
+                                                {request.bloodBankName}
                                             </td>
                                             <td className="px-6 py-4 text-sm">
                                                 <span

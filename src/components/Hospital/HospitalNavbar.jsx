@@ -30,8 +30,8 @@ export default function HospitalNavbar({ hospitalInfo }) {
             <div className="flex items-center gap-4 mr-5 pr-5">
                 <div className="flex flex-col items-end">
                     <h2 className="font-bold">Hi {hospitalInfo.hospitalName}</h2>
-                    {hospitalInfo?.city && (
-                        <p className="text-sm opacity-90">Location: {hospitalInfo.city}</p>
+                    {hospitalInfo?.hospitalAddress && (
+                        <p className="text-sm opacity-90">Location: {hospitalInfo.hospitalAddress}</p>
                     )}
                 </div>
                 <div className="w-12 h-12 rounded-full bg-white shadow-lg flex items-center justify-center font-bold text-red-700 text-lg">
