@@ -84,7 +84,7 @@ export default function UserLogin() {
           console.log(responseText);
           sessionStorage.setItem("BloodBank", responseText.bloodBankId);
           toast.success("Login Success");
-          navigate('/bloodbank/dashbord');
+          navigate('/bloodbank/dashbord/home');
         }
       }
     } catch (error) {

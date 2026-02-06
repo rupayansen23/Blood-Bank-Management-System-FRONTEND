@@ -124,7 +124,7 @@ export default function UserDonateRequests() {
                                 <td className="px-4 py-2 border">Request Id</td>
                                 <td className="px-4 py-2 border">Requester Name</td>
                                 <td className="px-4 py-2 border">Blood Group</td>
-                                <td className="px-4 py-2 border">Quantigy</td>
+                                <td className="px-4 py-2 border">Quantity</td>
                                 <td className="px-4 py-2 border">Gender</td>
                                 <td className="px-4 py-2 border">Status</td>
                                 {showActions && <td className="px-4 py-2 border">Actions</td>}

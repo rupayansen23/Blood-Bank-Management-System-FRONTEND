@@ -1,23 +1,48 @@
 import { useOutletContext, useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
 import { AlertCircle } from "lucide-react";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
+
+const API_BASE = import.meta.env.VITE_API_BASE_URL;
 
 export default function HospitalHome() {
     const navigate = useNavigate();
     const ctx = useOutletContext();
     const hospitalInfo = (ctx && (ctx.hospitalInfo ?? ctx)) || {};
+    const [bloodData, setBloodData] = useState([]);
 
-    // Sample blood inventory data by blood group
-    const bloodData = [
-        { bloodGroup: "O+", amount: 45 },
-        { bloodGroup: "O-", amount: 32 },
-        { bloodGroup: "A+", amount: 38 },
-        { bloodGroup: "A-", amount: 28 },
-        { bloodGroup: "B+", amount: 42 },
-        { bloodGroup: "B-", amount: 25 },
-        { bloodGroup: "AB+", amount: 20 },
-        { bloodGroup: "AB-", amount: 15 },
-    ];
+    // Function to transform blood group type from API format to display format
+    const formatBloodGroup = (type) => {
+        const mapping = {
+            "O_POS": "O+",
+            "O_NEG": "O-",
+            "A_POS": "A+",
+            "A_NEG": "A-",
+            "B_POS": "B+",
+            "B_NEG": "B-",
+            "AB_POS": "AB+",
+            "AB_NEG": "AB-"
+        };
+        return mapping[type] || type;
+    };
+
+    // Fetch blood inventory data from API
+    useEffect(() => {
+        const hospitalId = sessionStorage.getItem("hospital");
+        if (hospitalId) {
+            fetch(`${API_BASE}/getAvalableBloodsByHospitalId/${hospitalId}`)
+                .then((response) => response.json())
+                .then((data) => {
+                    // Transform API data to chart format
+                    const formattedData = data.map(item => ({
+                        bloodGroup: formatBloodGroup(item.hospitalBloodGroupType),
+                        amount: item.hospitalBloodAmount
+                    }));
+                    setBloodData(formattedData);
+                })
+                .catch((error) => console.log("Error fetching blood inventory:", error));
+        }
+    }, []);
 
     return (
         <div className="w-full bg-gray-50 p-6 min-h-screen">

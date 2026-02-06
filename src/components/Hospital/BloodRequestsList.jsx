@@ -1,10 +1,22 @@
 import { useOutletContext } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { Plus } from "lucide-react";
+import { Plus, Filter } from "lucide-react";
 import BloodRequestForm from "./BloodRequestForm";
 import { toast } from "react-toastify";
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL;
+
+const BLOOD_GROUPS = [
+    "All",
+    "A_POS",
+    "A_NEG",
+    "B_POS",
+    "B_NEG",
+    "AB_POS",
+    "AB_NEG",
+    "O_POS",
+    "O_NEG"
+];
 
 export default function BloodRequestsList() {
     const ctx = useOutletContext();
@@ -14,6 +26,8 @@ export default function BloodRequestsList() {
     const [requests, setRequests] = useState([]);
     const [loading, setLoading] = useState(false);
     const [showForm, setShowForm] = useState(false);
+    const [priorityFilter, setPriorityFilter] = useState('ALL');
+    const [bloodGroupFilter, setBloodGroupFilter] = useState('All');
     
     const fetchRequests = async () => {
         setLoading(true);
@@ -66,23 +80,61 @@ export default function BloodRequestsList() {
         }
     };
 
+    // Filtered requests based on priority and blood group
+    const filteredRequests = requests.filter(r => {
+        const priorityMatch = priorityFilter === 'ALL' || r.priority === priorityFilter;
+        const bloodGroupMatch = bloodGroupFilter === 'All' || r.bloodGroup === bloodGroupFilter;
+        return priorityMatch && bloodGroupMatch;
+    });
+
     return (
-        <div className="w-full bg-gray-50 p-6 min-h-screen">
+        <div className="w-full bg-white p-6 min-h-screen">
             <div className="max-w-7xl mx-auto">
                 {/* Header */}
                 <div className="mb-8">
-                    <div className="flex justify-between items-center mb-4">
+                    <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 gap-4">
                         <div>
-                            <h1 className="text-4xl font-bold text-gray-900">Blood Requests</h1>
-                            <p className="text-gray-600 mt-2">Manage your blood requests here</p>
+                            <h1 className="text-4xl font-extrabold text-red-600 drop-shadow-lg">Blood Requests</h1>
+                            <p className="text-gray-700 mt-2 text-lg">Manage your blood requests here</p>
                         </div>
                         <button
                             onClick={() => setShowForm(true)}
-                            className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transition"
+                            className="flex items-center gap-2 px-6 py-3 bg-red-500 hover:bg-red-600 text-white font-bold rounded-xl shadow-lg hover:shadow-2xl transition transform hover:scale-105"
                         >
-                            <Plus size={20} />
+                            <Plus size={22} />
                             New Request
                         </button>
+                    </div>
+                    {/* Filters */}
+                    <div className="flex flex-wrap gap-4 items-center mt-4 bg-white rounded-lg shadow px-6 py-4 border border-red-100">
+                        <div className="flex items-center gap-2">
+                            <Filter className="text-red-400" size={18} />
+                            <span className="font-semibold text-gray-700">Priority:</span>
+                            <select
+                                className="border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-red-400 bg-gray-50"
+                                value={priorityFilter}
+                                onChange={e => setPriorityFilter(e.target.value)}
+                            >
+                                <option value="ALL">All</option>
+                                <option value="CRITICAL">Critical</option>
+                                <option value="HIGH">High</option>
+                                <option value="MEDIUM">Medium</option>
+                                <option value="LOW">Low</option>
+                            </select>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <Filter className="text-red-400" size={18} />
+                            <span className="font-semibold text-gray-700">Blood Group:</span>
+                            <select
+                                className="border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-red-400 bg-gray-50"
+                                value={bloodGroupFilter}
+                                onChange={e => setBloodGroupFilter(e.target.value)}
+                            >
+                                {BLOOD_GROUPS.map(bg => (
+                                    <option key={bg} value={bg}>{bg === 'All' ? 'All' : bg.replace('_POS', '+').replace('_NEG', '-')}</option>
+                                ))}
+                            </select>
+                        </div>
                     </div>
                 </div>
 
@@ -95,55 +147,55 @@ export default function BloodRequestsList() {
                 )}
 
                 {/* Requests Table */}
-                <div className="bg-white rounded-lg shadow-lg overflow-hidden">
+                <div className="bg-white rounded-2xl shadow-2xl overflow-hidden border border-red-100">
                     {loading ? (
                         <div className="p-8 text-center">
                             <p className="text-gray-600 text-lg">Loading requests...</p>
                         </div>
-                    ) : requests.length === 0 ? (
+                    ) : filteredRequests.length === 0 ? (
                         <div className="p-8 text-center">
                             <p className="text-gray-600 text-lg">No blood requests made yet</p>
                             <button
                                 onClick={() => setShowForm(true)}
-                                className="mt-4 px-6 py-2 bg-red-500 hover:bg-red-600 text-white font-semibold rounded-lg transition"
+                                className="mt-4 px-6 py-2 bg-gradient-to-r from-pink-500 to-red-600 hover:from-red-600 hover:to-pink-700 text-white font-bold rounded-lg transition"
                             >
                                 Create Your First Request
                             </button>
                         </div>
                     ) : (
-                        <div className="overflow-x-auto">
-                            <table className="w-full">
-                                <thead className="bg-gray-100 border-b-2 border-gray-200">
+                        <div className="overflow-x-auto" style={{ maxHeight: '500px', overflowY: 'auto' }}>
+                            <table className="w-full min-w-[700px]">
+                                <thead className="bg-gradient-to-r from-red-100 to-pink-100 border-b-2 border-red-200">
                                     <tr>
-                                        <th className="px-6 py-4 text-left text-sm font-bold text-gray-700">Request ID</th>
-                                        <th className="px-6 py-4 text-left text-sm font-bold text-gray-700">Blood Group</th>
-                                        <th className="px-6 py-4 text-left text-sm font-bold text-gray-700">Quantity</th>
-                                        <th className="px-6 py-4 text-left text-sm font-bold text-gray-700">Priority</th>
-                                        <th className="px-6 py-4 text-left text-sm font-bold text-gray-700">Request To</th>
-                                        <th className="px-6 py-4 text-left text-sm font-bold text-gray-700">Status</th>
-                                        <th className="px-6 py-4 text-left text-sm font-bold text-gray-700">Date</th>
+                                        <th className="px-6 py-4 text-left text-sm font-extrabold text-red-700 tracking-wider">Request ID</th>
+                                        <th className="px-6 py-4 text-left text-sm font-extrabold text-red-700 tracking-wider">Blood Group</th>
+                                        <th className="px-6 py-4 text-left text-sm font-extrabold text-red-700 tracking-wider">Quantity</th>
+                                        <th className="px-6 py-4 text-left text-sm font-extrabold text-red-700 tracking-wider">Priority</th>
+                                        <th className="px-6 py-4 text-left text-sm font-extrabold text-red-700 tracking-wider">Request To</th>
+                                        <th className="px-6 py-4 text-left text-sm font-extrabold text-red-700 tracking-wider">Status</th>
+                                        <th className="px-6 py-4 text-left text-sm font-extrabold text-red-700 tracking-wider">Date</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {requests.map((request, index) => (
+                                    {filteredRequests.map((request, index) => (
                                         <tr
                                             key={request.reqId || index}
-                                            className="border-b border-gray-200 hover:bg-gray-50 transition"
+                                            className="border-b border-gray-200 hover:bg-pink-50 transition"
                                         >
-                                            <td className="px-6 py-4 text-sm text-gray-700 font-semibold">
+                                            <td className="px-6 py-4 text-sm text-gray-700 font-bold">
                                                 #{request.reqId}
                                             </td>
                                             <td className="px-6 py-4 text-sm">
-                                                <span className="inline-block px-4 py-2 bg-red-100 text-red-800 border border-red-300 rounded-full font-semibold">
+                                                <span className="inline-block px-4 py-2 bg-red-100 text-red-800 border border-red-300 rounded-full font-bold shadow-sm">
                                                     {request.bloodGroup?.replace("_", " ")}
                                                 </span>
                                             </td>
-                                            <td className="px-6 py-4 text-sm font-semibold text-gray-700">
+                                            <td className="px-6 py-4 text-sm font-bold text-gray-700">
                                                 {request.quantity} units
                                             </td>
                                             <td className="px-6 py-4 text-sm">
                                                 <span
-                                                    className={`inline-block px-4 py-2 border rounded-full font-semibold ${getPriorityColor(
+                                                    className={`inline-block px-4 py-2 border rounded-full font-bold shadow-sm ${getPriorityColor(
                                                         request.priority
                                                     )}`}
                                                 >
@@ -155,7 +207,7 @@ export default function BloodRequestsList() {
                                             </td>
                                             <td className="px-6 py-4 text-sm">
                                                 <span
-                                                    className={`inline-block px-4 py-2 border rounded-full font-semibold ${getStatusColor(
+                                                    className={`inline-block px-4 py-2 border rounded-full font-bold shadow-sm ${getStatusColor(
                                                         request.status
                                                     )}`}
                                                 >

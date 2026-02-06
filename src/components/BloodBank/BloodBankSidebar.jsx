@@ -58,6 +58,13 @@ export default function BloodBankSidebar() {
                 <div className={`${isOpen ? 'm-8' : 'm-4'} font-bold`}>
                     <ul className="">
                         <div className="mb-4">
+                            <Link to="home">
+                                <li className="flex cursor-pointer items-center justify-center gap-3 bg-pink-200 hover:bg-pink-300 px-4 py-2 rounded-lg shadow-md hover:shadow-lg transition text-center" title="Home">
+                                    <span className="w-5 h-5 text-gray-700">🏠</span> {isOpen && <span>Home</span>}
+                                </li>
+                            </Link>
+                        </div>
+                        <div className="mb-4">
                             <Link to="bloodbankinfo">
                                 <li className="flex cursor-pointer items-center justify-center gap-3 bg-pink-200 hover:bg-pink-300 px-4 py-2 rounded-lg shadow-md hover:shadow-lg transition text-center" title="Your Information">
                                     <CircleUserRound className="w-5 h-5 text-gray-700" /> {isOpen && <span>Your Information</span>}

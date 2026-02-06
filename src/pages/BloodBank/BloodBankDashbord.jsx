@@ -17,12 +17,12 @@ export default function BloodBankDashbord() {
     }, [])
 
     return(
-        <div className="bg-white h-screen flex flex-col">
+        <div className="bg-gradient-to-br from-pink-50 to-white min-h-screen flex flex-col">
             <BloodbankNavbar bloodBankInfo={bloodBankInfo}></BloodbankNavbar>
             <div className="flex flex-1">
                 <BloodBankSidebar></BloodBankSidebar>
                 <div className="flex-1 w-full overflow-auto">
-                    <Outlet context={{bloodBankInfo}}/>
+                    <Outlet context={{ bloodBankInfo }} />
                 </div>
             </div>
         </div>

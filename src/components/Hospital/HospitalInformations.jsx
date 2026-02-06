@@ -1,6 +1,6 @@
 import React from "react";
 import { useOutletContext } from "react-router-dom";
-import { Building2, Mail, Phone, MapPin, Stethoscope } from "lucide-react";
+import { Building2, Mail, Phone } from "lucide-react";
 
 export default function HospitalInformations() {
     const ctx = useOutletContext();
@@ -45,7 +45,6 @@ export default function HospitalInformations() {
                     <h1 className="text-4xl font-bold text-gray-900 mb-2">Hospital Information</h1>
                     <p className="text-gray-600">View and manage your hospital details</p>
                 </div>
-
                 {/* Profile Card */}
                 <div className="bg-white rounded-lg shadow-lg p-8 mb-8 border-t-4 border-red-500">
                     <div className="flex items-center gap-6 mb-8">
@@ -57,7 +56,6 @@ export default function HospitalInformations() {
                             <p className="text-gray-600 text-lg mt-1">Hospital ID: {makeDisplayValue(hospitalInfo.hospitalId)}</p>
                         </div>
                     </div>
-
                     {/* Information Grid */}
                     <div className="grid grid-cols-3 gap-6">
                         <InfoField
@@ -75,34 +73,6 @@ export default function HospitalInformations() {
                             label="Address"
                             value={makeDisplayValue(hospitalInfo.hospitalAddress)}
                         />
-                    </div>
-                </div>
-
-                {/* Additional Information */}
-                <div className="bg-white rounded-lg shadow-lg p-8 border-t-4 border-red-500">
-                    <h3 className="text-2xl font-bold text-gray-900 mb-6">Additional Details</h3>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        {hospitalInfo.registrationNumber && (
-                            <InfoField
-                                icon={Building2}
-                                label="Registration Number"
-                                value={makeDisplayValue(hospitalInfo.registrationNumber)}
-                            />
-                        )}
-                        {hospitalInfo.pinCode && (
-                            <InfoField
-                                icon={MapPin}
-                                label="Pin Code"
-                                value={makeDisplayValue(hospitalInfo.pinCode)}
-                            />
-                        )}
-                        {hospitalInfo.state && (
-                            <InfoField
-                                icon={MapPin}
-                                label="State"
-                                value={makeDisplayValue(hospitalInfo.state)}
-                            />
-                        )}
                     </div>
                 </div>
             </div>
