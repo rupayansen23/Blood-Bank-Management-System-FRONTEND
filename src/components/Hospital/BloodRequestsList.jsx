@@ -173,7 +173,7 @@ export default function BloodRequestsList() {
                                         <th className="px-6 py-4 text-left text-sm font-extrabold text-red-700 tracking-wider">Priority</th>
                                         <th className="px-6 py-4 text-left text-sm font-extrabold text-red-700 tracking-wider">Request To</th>
                                         <th className="px-6 py-4 text-left text-sm font-extrabold text-red-700 tracking-wider">Status</th>
-                                        <th className="px-6 py-4 text-left text-sm font-extrabold text-red-700 tracking-wider">Date</th>
+                                        <th className="px-6 py-4 text-left text-sm font-extrabold text-red-700 tracking-wider">Requested At</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -215,11 +215,13 @@ export default function BloodRequestsList() {
                                                 </span>
                                             </td>
                                             <td className="px-6 py-4 text-sm text-gray-600">
-                                                {request.createdAt
-                                                    ? new Date(request.createdAt).toLocaleDateString("en-US", {
-                                                        year: "numeric",
-                                                        month: "short",
-                                                        day: "numeric",
+                                                {request.requestDateTime
+                                                    ? new Date(request.requestDateTime).toLocaleString('en-IN', {
+                                                        year: 'numeric',
+                                                        month: 'short',
+                                                        day: 'numeric',
+                                                        hour: '2-digit',
+                                                        minute: '2-digit'
                                                       })
                                                     : "—"}
                                             </td>

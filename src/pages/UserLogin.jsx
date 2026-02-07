@@ -9,7 +9,7 @@ const API_BASE = import.meta.env.VITE_API_BASE_URL;
 
 const signupSchema = z.object({
   userName: z.string().email('Invalid Email'),
-  password: z.string().min(8, 'Password is too weak'),
+  password: z.string().min(5, 'Password is too weak'),
   role: z.enum(['hospital', 'bloodBank', 'user'], {
     errorMap: () => ({ message: 'Select a role' }),
   }),

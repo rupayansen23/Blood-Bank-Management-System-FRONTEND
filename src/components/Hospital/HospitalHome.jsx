@@ -1,6 +1,5 @@
 import { useOutletContext, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { AlertCircle } from "lucide-react";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL;
@@ -78,7 +77,7 @@ export default function HospitalHome() {
                                 onClick={() => navigate("/hospital/dashbord/info")}
                                 className="px-4 py-3 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-semibold rounded-lg transition shadow-md hover:shadow-lg cursor-pointer"
                             >
-                                Update Profile
+                                Your Profile
                             </button>
                         </div>
                     </div>
@@ -106,19 +105,6 @@ export default function HospitalHome() {
                             />
                         </BarChart>
                     </ResponsiveContainer>
-                </div>
-
-                {/* Important Note */}
-                <div className="mt-8 bg-yellow-50 border-l-4 border-yellow-400 p-6 rounded-lg">
-                    <div className="flex gap-4">
-                        <AlertCircle className="text-yellow-600 flex-shrink-0" size={24} />
-                        <div>
-                            <h3 className="font-bold text-yellow-800 mb-2">Important Notice</h3>
-                            <p className="text-yellow-700">
-                                For urgent blood requests, please make sure to set the priority to CRITICAL and provide accurate recipient information.
-                            </p>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>

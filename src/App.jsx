@@ -27,11 +27,14 @@ import BloodRequests from './pages/BloodBank/BloodRequests'
 import UserDonations from './pages/User/userDonations'
 import DonateRequests from './pages/BloodBank/DonateRequests'
 import BloodBankHome from './pages/BloodBank/Home'
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 function App() {
   const [count, setCount] = useState(0)
 
   return (
     <Provider store={store}>
+      <ToastContainer />
       <Routes>
         <Route path="/" element={<HomePage></HomePage>}></Route>
         <Route path="/adminlogin" element={<Login></Login>}></Route>

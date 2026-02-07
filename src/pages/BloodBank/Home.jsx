@@ -9,6 +9,7 @@ export default function BloodBankHome() {
     const ctx = useOutletContext();
     const bloodBankInfo = (ctx && (ctx.bloodBankInfo ?? ctx)) || {};
     const [bloodData, setBloodData] = useState([]);
+    const [totalHospitals, setTotalHospitals] = useState(0);
 
     // Function to transform blood group type from API format to display format
     const formatBloodGroup = (type) => {
@@ -40,6 +41,25 @@ export default function BloodBankHome() {
                     setBloodData(formattedData);
                 })
                 .catch((error) => console.log("Error fetching blood inventory:", error));
+        }
+    }, []);
+
+    // Fetch requests and calculate total unique hospitals
+    useEffect(() => {
+        const bloodBankId = sessionStorage.getItem("BloodBank");
+        if (bloodBankId) {
+            fetch(`${API_BASE}/getRequestsById/${bloodBankId}`)
+                .then((response) => response.json())
+                .then((data) => {
+                    if (Array.isArray(data)) {
+                        // Count unique hospitals with FULFILLED status
+                        const uniqueHospitals = new Set(
+                            data.filter(req => req.status === "FULFILLED").map(req => req.requesterId)
+                        ).size;
+                        setTotalHospitals(uniqueHospitals);
+                    }
+                })
+                .catch((error) => console.log("Error fetching requests:", error));
         }
     }, []);
 
@@ -85,7 +105,7 @@ export default function BloodBankHome() {
                             <div>
                                 <p className="text-gray-500 font-medium mb-2">Total Hospitals</p>
                                 <h3 className="text-2xl font-bold text-rose-500">
-                                    {bloodBankInfo?.totalHospitals || '0'}
+                                    {totalHospitals}
                                 </h3>
                             </div>
                             <Droplets className="text-rose-400" size={36} />

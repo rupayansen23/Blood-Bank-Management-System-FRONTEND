@@ -127,6 +127,7 @@ export default function UserDonateRequests() {
                                 <td className="px-4 py-2 border">Quantity</td>
                                 <td className="px-4 py-2 border">Gender</td>
                                 <td className="px-4 py-2 border">Status</td>
+                                <td className="px-4 py-2 border">Requested At</td>
                                 {showActions && <td className="px-4 py-2 border">Actions</td>}
                                 {showFulfilledColumn && <td className="px-4 py-2 border">Fulfilled</td>}
                             </tr>
@@ -141,6 +142,17 @@ export default function UserDonateRequests() {
                                         <td className="px-4 py-2 border">{data?.unites}</td>
                                         <td className="px-4 py-2 border">{data?.donorDTO?.donorGender}</td>
                                         <td className="px-4 py-2 border">{data?.requestStatus}</td>
+                                        <td className="px-4 py-2 border">
+                                            {data?.requestedAt
+                                                ? new Date(data.requestedAt).toLocaleString('en-IN', {
+                                                      year: 'numeric',
+                                                      month: 'short',
+                                                      day: 'numeric',
+                                                      hour: '2-digit',
+                                                      minute: '2-digit'
+                                                  })
+                                                : '—'}
+                                        </td>
                                         {
                                             showActions && <td className="border px-4 py-2 space-x-2">
                                             <button

@@ -66,6 +66,7 @@ export default function DonateReqList() {
                   <td className="px-4 py-2 border">Quantity</td>
                   <td className="px-4 py-2 border">Gender</td>
                   <td className="px-4 py-2 border">Status</td>
+                  <td className="px-4 py-2 border">Requested At</td>
                   <td className="px-4 py-2 border">Requested Blood Bank</td>
                 </tr>
               </thead>
@@ -81,6 +82,17 @@ export default function DonateReqList() {
                     <td className="px-4 py-2 border">{data?.unites ?? data?.units ?? "-"}</td>
                     <td className="px-4 py-2 border">{data?.donorDTO?.donorGender ?? "-"}</td>
                     <td className="px-4 py-2 border">{data?.requestStatus ?? "-"}</td>
+                    <td className="px-4 py-2 border">
+                      {data?.requestedAt
+                        ? new Date(data.requestedAt).toLocaleString('en-IN', {
+                              year: 'numeric',
+                              month: 'short',
+                              day: 'numeric',
+                              hour: '2-digit',
+                              minute: '2-digit'
+                          })
+                        : '—'}
+                    </td>
                     <td className="px-4 py-2 border">{data?.bloodBankName ?? data?.bloodBank?.bloodBankName ?? "-"}</td>
                   </tr>
                 ))}

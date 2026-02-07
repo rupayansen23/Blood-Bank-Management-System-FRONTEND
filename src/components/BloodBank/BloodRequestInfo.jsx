@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-
 const BASE_API = import.meta.env.VITE_API_BASE_URL;
 
 export default function BloodRequestInfo() {
@@ -35,7 +34,7 @@ export default function BloodRequestInfo() {
     useEffect(() => {
         fetchRequests();
     }, []);
-
+    console.log(bloodReqInfo);
     /* ---------------- UPDATE STATUS ---------------- */
     const updateStatus = async (endpoint, successMsg) => {
         try {
@@ -86,6 +85,7 @@ export default function BloodRequestInfo() {
                         <th className="border px-3 py-2">Quantity</th>
                         <th className="border px-3 py-2">Priority</th>
                         <th className="border px-3 py-2">Status</th>
+                        <th className="border px-3 py-2">Requested At</th>
                         <th className="border px-3 py-2">Action</th>
                     </tr>
                 </thead>
@@ -93,7 +93,7 @@ export default function BloodRequestInfo() {
                 <tbody>
                     {filteredData.length === 0 ? (
                         <tr>
-                            <td colSpan="7" className="text-center py-4">
+                            <td colSpan="8" className="text-center py-4">
                                 No {filter} requests
                             </td>
                         </tr>
@@ -110,6 +110,17 @@ export default function BloodRequestInfo() {
                                     <td className="border px-3 py-2">{req.priority}</td>
                                     <td className="border px-3 py-2 font-semibold">
                                         {currentStatus}
+                                    </td>
+                                    <td className="border px-3 py-2">
+                                        {req.requestDateTime
+                                            ? new Date(req.requestDateTime).toLocaleString('en-IN', {
+                                                  year: 'numeric',
+                                                  month: 'short',
+                                                  day: 'numeric',
+                                                  hour: '2-digit',
+                                                  minute: '2-digit'
+                                              })
+                                            : '—'}
                                     </td>
 
                                     <td className="border px-3 py-2">
@@ -142,14 +153,14 @@ export default function BloodRequestInfo() {
                                             </div>
                                         )}
 
-                                        {/* ACCEPTED → FULFILLED */}
-                                        {currentStatus === "ACCEPTED" && (
+                                        {/* ASSIGNED → FULFILLED */}
+                                        {currentStatus === "ASSIGNED" && (
                                             <label className="flex justify-center gap-2">
                                                 <input
                                                     type="checkbox"
                                                     onChange={() =>
                                                         updateStatus(
-                                                            `${BASE_API}/update-fulfilled/${req.reqId}`,
+                                                            `${BASE_API}/update-fulfil/${req.reqId}`,
                                                             "Request fulfilled"
                                                         )
                                                     }
